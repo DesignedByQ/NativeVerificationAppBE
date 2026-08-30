@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    # Defaults to 'local' if SPRING_PROFILES_ACTIVE environment variable is not set
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  jpa:
+    open-in-view: false
