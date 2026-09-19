@@ -2,6 +2,7 @@ package com.nativeverificationappbe.api.services;
 
 import com.nativeverificationappbe.api.models.NINandSelfieDTO;
 import com.nativeverificationappbe.api.models.UserCredentialsDTO;
+import jakarta.servlet.http.HttpSession;
 
 public interface SignUpServices {
 
@@ -9,12 +10,11 @@ public interface SignUpServices {
 
     UserCredentialsDTO ninAndFaceCheck(NINandSelfieDTO ninAndSelfieDTO);
 
-    Boolean createAccount(UserCredentialsDTO userCredentialsDTO);
+    Long createAccount(UserCredentialsDTO userCredentialsDTO, HttpSession session);
 
     Boolean persistOTP(String contact);
 
     Integer createOTP();
 
-    String initiateEmailService(String userEmail, Integer otp);
-
+    long incrementAndGetCount(String sessionId);
 }

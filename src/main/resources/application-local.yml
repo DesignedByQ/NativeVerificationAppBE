@@ -10,3 +10,9 @@ spring:
     show-sql: true
 
   X-Api-Key: ${API_KEY:}
+
+server:
+  servlet:
+    session:
+      cookie:
+        secure: false # Works over http://localhost

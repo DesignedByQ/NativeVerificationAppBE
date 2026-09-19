@@ -3,7 +3,9 @@ package com.nativeverificationappbe.api.services;
 import com.nativeverificationappbe.api.models.*;
 import com.nativeverificationappbe.api.repos.UserCredRepo;
 import com.nativeverificationappbe.api.repos.VerificationRepo;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,11 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.data.redis.core.RedisTemplate;
+
+import java.util.concurrent.TimeUnit;
+
+
 @Service
 @RequiredArgsConstructor
 public class SignUpServicesImp implements SignUpServices {
@@ -24,11 +31,15 @@ public class SignUpServicesImp implements SignUpServices {
 
     private static final SecureRandom secureRandom = new SecureRandom();
 
+    private final RedisTemplate<String, Object> redisTemplate;
+
     private final VerificationRepo verificationRepo;
 
     private final UserCredRepo userCredRepo;
 
     private final Mapper mapper;
+
+    private final CommunicationServicesImp communicationServicesImp;
 
     private final WebClient webClient = WebClient.builder()
             .baseUrl("https://api.prembly.com")
@@ -38,8 +49,20 @@ public class SignUpServicesImp implements SignUpServices {
     @Value("${API_KEY}")
     private String getApiKey;
 
-    @Value("${BREVO_API_KEY}")
-    private String getBrevoKey;
+    /**
+     * Generates a random 5-digit numeric string (leading zeros allowed).
+     *
+     * @return a string in the range "00000" to "99999"
+     */
+    public String randomFiveDigit() {
+        int value = secureRandom.nextInt(100_000); // 0..99999
+        return String.format("%05d", value);
+    }
+
+    @Override
+    public Integer createOTP() {
+        return secureRandom.nextInt(100_000, 999_999); // 100,000 (inclusive) to 999,000 (exclusive)
+    }
 
     @Override
     public Boolean livelinessCheck(NINandSelfieDTO ninAndSelfieDTO) {
@@ -137,7 +160,7 @@ public class SignUpServicesImp implements SignUpServices {
     }
 
     @Override
-    public Boolean createAccount(UserCredentialsDTO userCredentialsDTO) {
+    public Long createAccount(UserCredentialsDTO userCredentialsDTO, HttpSession session) {
 
         try {
 
@@ -156,6 +179,9 @@ public class SignUpServicesImp implements SignUpServices {
 
             logger.info("Account created successfully.");
 
+            session.setAttribute("USER_ID", user.getAccountId().toString());
+            MDC.put("userId", user.getAccountId().toString());
+
 //            session.setAttribute("user_id", user.accountId.toString())
 //            session.setAttribute("is_verified", true)
 //            MDC.put("userId", user.accountId.toString())
@@ -168,12 +194,12 @@ public class SignUpServicesImp implements SignUpServices {
 //            logger.warn("No Session found, login to start again.")
 //        }
 
-            return true;
+            return user.getAccountId();
 
         } catch (Exception e) {
 
             logger.error("Error creating user account: ", e);
-            return false;
+            return null;
         }
 
     }
@@ -206,7 +232,7 @@ public class SignUpServicesImp implements SignUpServices {
 
                 }
 
-                initiateEmailService(contact, newOTP)
+                communicationServicesImp.initiateEmailService(contact, newOTP);
 
             } catch (Exception e) {
                 logger.error("Failed to add email OTP to entity: ", e);
@@ -236,7 +262,7 @@ public class SignUpServicesImp implements SignUpServices {
 
                 }
 
-                initiatePhoneService(contact, newOTP)
+                communicationServicesImp.initiatePhoneService(contact, newOTP);
 
             } catch (Exception e) {
                 logger.error("Failed to add phone OTP to entity: ", e);
@@ -248,54 +274,32 @@ public class SignUpServicesImp implements SignUpServices {
         return false;
     }
 
+    /**
+     * Increment the login-attempts counter for the given session and return the new count.
+     * If this is the first increment, set an expiry of 30 minutes on the key.
+     *
+     * @param sessionId session identifier
+     * @return current attempt count
+     */
     @Override
-    public Integer createOTP() {
-        return secureRandom.nextInt(100_000, 999_999); // 100,000 (inclusive) to 999,000 (exclusive)
+    public long incrementAndGetCount(String sessionId) {
+        String key = "login_attempts:" + sessionId;
+
+        Long count = redisTemplate.opsForValue().increment(key);
+        if (count == null) {
+            // defensive fallback: ensure a value exists
+            count = 1L;
+            redisTemplate.opsForValue().set(key, count);
+        }
+
+        if (count == 1L) {
+            // set idle expiry for the attempts key
+            redisTemplate.expire(key, 30, TimeUnit.MINUTES);
+        }
+
+        return count;
     }
 
-    @Override
-    public String initiateEmailService(String userEmail, Integer otp) {
 
-        // 2. Fetch the key
-        String brevoApiKey = Optional.ofNullable(getBrevoKey)
-                .orElseThrow(() -> new IllegalStateException("BREVO_API_KEY not found in environment variable."));
-
-        // Setup Client
-        val defaultClient: ApiClient = Configuration.getDefaultApiClient()
-        val apiKeyAuth = defaultClient.getAuthentication("api-key") as ApiKeyAuth
-        apiKeyAuth.apiKey = apiKey
-
-        val apiInstance = TransactionalEmailsApi()
-
-        // Create Email Components
-        val sender = SendSmtpEmailSender().apply {
-            name = "O & O Verification App"
-            email = "oando.applications@gmail.com" // Must be verified in Brevo
-        }
-
-        val to = SendSmtpEmailTo().apply {
-            email = userEmail
-        }
-
-        val emailContent = SendSmtpEmail().apply {
-            this.sender = sender
-            this.to = listOf(to)
-            this.subject = "Hello from O & O!"
-            this.htmlContent = "<html><body><h1>Your new OTP is: $otp</h1></body></html>"
-        }
-
-        try {
-            val result = apiInstance.sendTransacEmail(emailContent)
-            logger.info("Email sent! ID: ${result.messageId}")
-
-            //deleteOTPtimer(userEmail)
-
-        } catch (e: Exception) {
-            println("Error sending email: ${e.message}")
-            return "Error sending email"
-        }
-
-        return "Email sent successfully!"
-    }
 
 }
