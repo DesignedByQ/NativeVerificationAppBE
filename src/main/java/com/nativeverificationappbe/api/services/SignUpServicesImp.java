@@ -177,10 +177,11 @@ public class SignUpServicesImp implements SignUpServices {
 
             verificationRepo.save(associatedVerificationRequest);
 
-            logger.info("Account created successfully.");
-
             session.setAttribute("USER_ID", user.getAccountId().toString());
+            session.setAttribute("ROLE", "ROLE_USER");
             MDC.put("userId", user.getAccountId().toString());
+
+            logger.info("Account created successfully.");
 
 //            session.setAttribute("user_id", user.accountId.toString())
 //            session.setAttribute("is_verified", true)
@@ -301,5 +302,73 @@ public class SignUpServicesImp implements SignUpServices {
     }
 
 
+    @Override
+    public UserCredentialsEntity authenticate(String email, String password) {
+
+        UserCredentialsEntity user = userCredRepo.findUserSignUpByEmail(email);
+
+        if (user == null) {
+            logger.warn("Login credentials not matched.");
+            return null;
+        } else {
+
+            if (!user.getPassword().equals(password)) {
+                logger.warn("Password is not recognised.");
+                return null;
+            }
+
+        }
+
+        return user;
+
+
+    }
+
+    @Override
+    public Boolean checkPhoneOTPmatches(OTPrequest otpRequest, String user_id) {
+
+        Long userId = Long.parseLong(user_id);
+
+        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId);
+
+        var currentOtp = user.getPhoneOTP();
+        var createdAt = user.getOtpCreatedAt();
+
+        // 1. Check if an OTP even exists
+        if (currentOtp == null || createdAt == null) {
+            logger.info("No active OTP found for user.")
+            return false
+        }
+
+        // 2. Check if the 5 minutes have expired
+        val minutesElapsed = Duration.between(createdAt, LocalDateTime.now()).toMinutes()
+        if (minutesElapsed >= 10) {
+            logger.info("OTP has expired ($minutesElapsed minutes elapsed). Clearing OTP.")
+
+            // Clear it so they can't try again with an expired code
+            user.phoneOTP = null
+            user.otpCreatedAt = null
+            verificationRepo.save(user)
+            return false
+        }
+
+        // 3. Match the OTP
+        return if (otpRequest == currentOtp) {
+            logger.info("OTP matched successfully.")
+            // Clear the OTP immediately on success
+            user.phoneOTP = null
+            user.otpCreatedAt = null
+            user.phoneVerified = true
+            verificationRepo.save(user)
+
+            logger.info("Now persisting Email OTP.")
+            persistOTP(user.userCredentialsEntity.email)
+
+            true
+        } else {
+            logger.info("Incorrect OTP submitted.")
+            false
+        }
+    }
 
 }

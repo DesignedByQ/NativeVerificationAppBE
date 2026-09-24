@@ -1,10 +1,17 @@
 package com.nativeverificationappbe.api.controllers;
 
+import com.nativeverificationappbe.api.models.LoginRequest;
+import com.nativeverificationappbe.api.models.UserCredentialsEntity;
+import com.nativeverificationappbe.api.models.VerificationRequestEntity;
+import com.nativeverificationappbe.api.repos.VerificationRepo;
+import com.nativeverificationappbe.api.services.SignUpServicesImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,7 +19,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("nativeverificationappbe/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
+
+    private SignUpServicesImp signUpServices;
+    private VerificationRepo verificationRepoRepo;
 
     /**
      * Login endpoint to create a fresh secure session
@@ -23,14 +34,15 @@ public class AuthController {
             HttpServletRequest request) {
 
         // 1. Authenticate user against database & hash comparison
-        User user = userService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+        UserCredentialsEntity user = signUpServices.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
 
         // 2. Create or fetch active HTTP session
         HttpSession session = request.getSession(true);
 
         // 3. Dynamically set session attributes from DB record
-        session.setAttribute("USER_ID", user.getId());
-        session.setAttribute("ROLES", user.getRoles()); // e.g., ["ROLE_USER"]
+        session.setAttribute("USER_ID", user.getAccountId());
+        VerificationRequestEntity vr = verificationRepoRepo.findUserByAccountId(user.getAccountId());
+        session.setAttribute("ROLES", vr.getRole()); // e.g., ["ROLE_USER"]
 
         return ResponseEntity.ok(Map.of("message", "Logged in successfully"));
     }

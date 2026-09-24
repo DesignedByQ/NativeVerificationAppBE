@@ -1,6 +1,7 @@
 package com.nativeverificationappbe.api.controllers;
 
 import com.nativeverificationappbe.api.models.NINandSelfieDTO;
+import com.nativeverificationappbe.api.models.OTPrequest;
 import com.nativeverificationappbe.api.models.UserCredentialsDTO;
 import com.nativeverificationappbe.api.services.SignUpServicesImp;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,7 +58,7 @@ public class SignUpController {
             );
         }
 
-        logger.info(String.valueOf(ninAndSelfieDTO));
+        //logger.info(String.valueOf(ninAndSelfieDTO));
 
         Boolean selfieIsReal = signUpServices.livelinessCheck(ninAndSelfieDTO);
 
@@ -80,7 +81,7 @@ public class SignUpController {
 
             //User confirms details at FE
             return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-                    "status", true,
+                            "status", true,
                             "ninResponse", ninMatch,
                             "message", "NIN and Selfie verified successfully.",
                             "sessionId", session.getId()
@@ -103,10 +104,41 @@ public class SignUpController {
 
         if (accountCreated != null) {
 
-            session.setAttribute("USER_ID", accountCreated);
-            session.setAttribute("ROLE", "ROLE_USER");
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    Map.of(
+                            "status", HttpStatus.CREATED.toString(),
+                            "message", "New account created successfully.",
+                            "sessionId", session.getId(),
+                            "sessionUser", accountCreated.toString(),
+                            "accountCreated", "true"
+                    )
+            );
 
         }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                Map.of(
+                        "message", "User account was not created, failed to persist credentials, check you don't have an existing account or contact support for assistance.",
+                        "status", HttpStatus.EXPECTATION_FAILED.toString(),
+                        "accountCreated", "false"
+                        )
+        );
+
+    }
+
+    @PostMapping(value = "/phoneotp", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Boolean> receivePhoneOTPfromUser(@RequestBody OTPrequest otp, HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+
+        String userId = session.getAttribute("USER_ID").toString();
+
+        logger.info("Confirming OTP matches for: {}", userId);
+
+        return signUpServices.checkOTPmatches(otp, userId);
+
+        go into services and check if the otp matches
+
         return null;
     }
 

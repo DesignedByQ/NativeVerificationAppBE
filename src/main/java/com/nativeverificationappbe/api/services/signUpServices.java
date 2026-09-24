@@ -1,7 +1,9 @@
 package com.nativeverificationappbe.api.services;
 
 import com.nativeverificationappbe.api.models.NINandSelfieDTO;
+import com.nativeverificationappbe.api.models.OTPrequest;
 import com.nativeverificationappbe.api.models.UserCredentialsDTO;
+import com.nativeverificationappbe.api.models.UserCredentialsEntity;
 import jakarta.servlet.http.HttpSession;
 
 public interface SignUpServices {
@@ -17,4 +19,8 @@ public interface SignUpServices {
     Integer createOTP();
 
     long incrementAndGetCount(String sessionId);
+
+    UserCredentialsEntity authenticate(String email, String password);
+
+    Boolean checkPhoneOTPmatches(OTPrequest otpRequest, String user_id);
 }

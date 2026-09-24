@@ -17,6 +17,13 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+
   app:
     build: .
     container_name: spring_app
@@ -26,11 +33,14 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     environment:
       - SPRING_PROFILES_ACTIVE=${APP_ENV:-production}
       - DB_URL=jdbc:postgresql://postgres_db:5432/mydatabase
       - DB_USERNAME=${PROD_DB_USER:-myuser}
       - DB_PASSWORD=${PROD_DB_PASS:-mypassword}
+      - SPRING_REDIS_HOST=redis
 
 volumes:
   postgres_data:

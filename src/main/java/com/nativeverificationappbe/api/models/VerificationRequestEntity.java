@@ -1,5 +1,6 @@
 package com.nativeverificationappbe.api.models;
 
+import com.nativeverificationappbe.api.config.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,8 +27,9 @@ public class VerificationRequestEntity {
     @Column(unique= true)
     private String expoToken;
     @OneToOne
-    @JoinColumn(name="user", nullable=false)
+    @JoinColumn(name="users", nullable=false)
     private UserCredentialsEntity userCredentialsEntity;
     private Boolean addressVerified = false;
-    //var password: String,
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

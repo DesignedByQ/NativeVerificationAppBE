@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NINandSelfieDTO {
+public class LoginRequest {
 
-    private String nin;
-    private String image;
-    private String birthdate;
+    private String email;
+    private String password;
 
 }
