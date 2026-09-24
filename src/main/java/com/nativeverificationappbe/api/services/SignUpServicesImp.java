@@ -8,20 +8,20 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.SecureRandom;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.redis.core.RedisTemplate;
-
-import java.util.concurrent.TimeUnit;
-
 
 @Service
 @RequiredArgsConstructor
@@ -125,7 +125,7 @@ public class SignUpServicesImp implements SignUpServices {
                     .bodyToMono(PremblyLivelinessResponse.class)
                     .block();
 
-            if (!response.getStatus()) {
+            if (response == null) {
                 logger.error("Prembly returned null response.");
                 return null;
             }
@@ -295,7 +295,7 @@ public class SignUpServicesImp implements SignUpServices {
 
         if (count == 1L) {
             // set idle expiry for the attempts key
-            redisTemplate.expire(key, 30, TimeUnit.MINUTES);
+            redisTemplate.expire(key, Duration.ofMinutes(30));
         }
 
         return count;
@@ -321,13 +321,13 @@ public class SignUpServicesImp implements SignUpServices {
 
         return user;
 
-
     }
 
     @Override
-    public Boolean checkPhoneOTPmatches(OTPrequest otpRequest, String user_id) {
+    public Boolean checkPhoneOTPmatches(String otp_request, String user_id) {
 
         Long userId = Long.parseLong(user_id);
+        int otpRequest = Integer.parseInt(otp_request);
 
         VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId);
 
@@ -336,39 +336,105 @@ public class SignUpServicesImp implements SignUpServices {
 
         // 1. Check if an OTP even exists
         if (currentOtp == null || createdAt == null) {
-            logger.info("No active OTP found for user.")
-            return false
+            logger.info("No active OTP found for user.");
+            return false;
         }
 
-        // 2. Check if the 5 minutes have expired
-        val minutesElapsed = Duration.between(createdAt, LocalDateTime.now()).toMinutes()
+        // 2. Check if the 10 minutes have expired
+        var minutesElapsed = Duration.between(createdAt, LocalDateTime.now()).toMinutes();
         if (minutesElapsed >= 10) {
-            logger.info("OTP has expired ($minutesElapsed minutes elapsed). Clearing OTP.")
+            logger.warn("Clearing OTP because it has expired, minutes elapsed: {}", minutesElapsed);
 
             // Clear it so they can't try again with an expired code
-            user.phoneOTP = null
-            user.otpCreatedAt = null
-            verificationRepo.save(user)
-            return false
+            user.setPhoneOTP(null);
+            user.setOtpCreatedAt(null);
+            verificationRepo.save(user);
+            return false;
         }
 
         // 3. Match the OTP
-        return if (otpRequest == currentOtp) {
-            logger.info("OTP matched successfully.")
+        if (otpRequest == currentOtp) {
+            logger.info("OTP matched successfully.");
             // Clear the OTP immediately on success
-            user.phoneOTP = null
-            user.otpCreatedAt = null
-            user.phoneVerified = true
-            verificationRepo.save(user)
+            user.setPhoneOTP(null);
+            user.setOtpCreatedAt(null);
+            user.setPhoneVerified(true);
+            verificationRepo.save(user);
 
-            logger.info("Now persisting Email OTP.")
-            persistOTP(user.userCredentialsEntity.email)
+            logger.info("Now persisting Email OTP.");
+            persistOTP(user.getUserCredentialsEntity().getEmail());
 
-            true
+            return true;
         } else {
-            logger.info("Incorrect OTP submitted.")
-            false
+            logger.info("Incorrect OTP submitted.");
+            return false;
         }
+    }
+
+    @Override
+    public Boolean checkEmailOTPmatches(String otp_request, String user_id) {
+
+        Long userId = Long.parseLong(user_id);
+        int otpRequest = Integer.parseInt(otp_request);
+
+        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId);
+
+        var currentOtp = user.getEmailOTP();
+        var createdAt = user.getOtpCreatedAt();
+
+        // 1. Check if an OTP even exists
+        if (currentOtp == null || createdAt == null) {
+            logger.info("No active OTP found for user.");
+            return false;
+        }
+
+        // 2. Check if the 10 minutes have expired
+        var minutesElapsed = Duration.between(createdAt, LocalDateTime.now()).toMinutes();
+        if (minutesElapsed >= 10) {
+            logger.warn("Clearing OTP because it has expired, minutes elapsed: {}", minutesElapsed);
+
+            // Clear it so they can't try again with an expired code
+            user.setEmailOTP(null);
+            user.setOtpCreatedAt(null);
+            verificationRepo.save(user);
+            return false;
+        }
+
+        // 3. Match the OTP
+        if (otpRequest == currentOtp) {
+            logger.info("OTP matched successfully.");
+            // Clear the OTP immediately on success
+            user.setEmailOTP(null);
+            user.setOtpCreatedAt(null);
+            user.setEmailVerified(true);
+            verificationRepo.save(user);
+
+            return true;
+        } else {
+            logger.info("Incorrect OTP submitted.");
+            return false;
+        }
+    }
+
+    public Map<String, Boolean> checkOTPverification(String user_id){
+
+        Long userId = Long.parseLong(user_id);
+
+        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId);
+
+        if (user == null) {
+            logger.warn("User not found.");
+            return Map.of(
+                    "emailVerification", false,
+                    "phoneVerification", false
+            );
+        }
+
+        return Map.of(
+                "emailVerification", user.getEmailVerified(),
+                "phoneVerification", user.getPhoneVerified()
+        );
+
     }
 
 }

@@ -135,11 +135,35 @@ public class SignUpController {
 
         logger.info("Confirming OTP matches for: {}", userId);
 
-        return signUpServices.checkOTPmatches(otp, userId);
+        return ResponseEntity.ok(signUpServices.checkPhoneOTPmatches(otp.getOtp(), userId));
 
-        go into services and check if the otp matches
-
-        return null;
     }
+
+    @PostMapping(value = "/emailotp", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Boolean> receiveEmailOTPfromUser(@RequestBody OTPrequest otp, HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+
+        String userId = session.getAttribute("USER_ID").toString();
+
+        logger.info("Confirming OTP matches for: {}", userId);
+
+        return ResponseEntity.ok(signUpServices.checkEmailOTPmatches(otp.getOtp(), userId));
+    }
+
+    @GetMapping(value = "/verify-otps", produces = "application/json")
+    public ResponseEntity<Map<String, Boolean>> checkOTPsAreVerified(HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+
+        var userId = session.getAttribute("USER_ID").toString();
+
+        if (userId.isEmpty()) {
+            throw new IllegalStateException("Session not found account doesn't exist.");
+        }
+
+        return ResponseEntity.ok(signUpServices.checkOTPverification(userId));
+    }
+
 
 }

@@ -22,5 +22,7 @@ public interface SignUpServices {
 
     UserCredentialsEntity authenticate(String email, String password);
 
-    Boolean checkPhoneOTPmatches(OTPrequest otpRequest, String user_id);
+    Boolean checkPhoneOTPmatches(String otpRequest, String user_id);
+
+    Boolean checkEmailOTPmatches(String otPrequest, String user_id);
 }
