@@ -35,6 +35,9 @@ public class UserCredentialsEntity {
     @Column(unique = true)
     private String email;
     private String password;
+    @OneToOne
+    @JoinColumn(name="address", nullable=true)
+    private AddressEntity address;
 
 //    @OneToOne
 //    @JoinColumn(name="address", nullable=true)

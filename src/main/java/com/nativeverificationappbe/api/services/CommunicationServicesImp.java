@@ -62,10 +62,11 @@ public class CommunicationServicesImp implements CommunicationServices {
             var result = apiInstance.sendTransacEmail(emailContent);
             logger.info("Email sent! ID: {}", result.getMessageId());
             return "Email sent successfully!";
-        } catch (Exception e) {
-            logger.info("Error sending email: {}", e.getMessage());
+        } catch (ApiException e) {
+            logger.error("Brevo API error: status={}, body={}", e.getCode(), e.getResponseBody(), e);
             return "Error sending email";
         }
+
 
     }
 

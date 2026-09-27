@@ -22,8 +22,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private SignUpServicesImp signUpServices;
-    private VerificationRepo verificationRepoRepo;
+    private final SignUpServicesImp signUpServices;
+    private final VerificationRepo verificationRepoRepo;
 
     /**
      * Login endpoint to create a fresh secure session

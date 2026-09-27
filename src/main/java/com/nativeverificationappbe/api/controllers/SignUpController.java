@@ -17,7 +17,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 
 @RestController
-@RequestMapping("/nativeverificationappbe/api")
+@RequestMapping("/nativeverificationappbe/api/newuser")
 @RequiredArgsConstructor
 public class SignUpController {
 
@@ -140,7 +140,7 @@ public class SignUpController {
     }
 
     @PostMapping(value = "/emailotp", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Boolean> receiveEmailOTPfromUser(@RequestBody OTPrequest otp, HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> receiveEmailOTPfromUser(@RequestBody OTPrequest otp, HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
 
@@ -148,22 +148,12 @@ public class SignUpController {
 
         logger.info("Confirming OTP matches for: {}", userId);
 
-        return ResponseEntity.ok(signUpServices.checkEmailOTPmatches(otp.getOtp(), userId));
+        Boolean otpVerified = signUpServices.checkEmailOTPmatches(otp.getOtp(), userId);
+
+        return ResponseEntity.ok(Map.of(
+                "sessionId", session.getId(),
+                "sessionUser", userId,
+                "otpVerified", otpVerified.toString()));
     }
-
-    @GetMapping(value = "/verify-otps", produces = "application/json")
-    public ResponseEntity<Map<String, Boolean>> checkOTPsAreVerified(HttpServletRequest request){
-
-        HttpSession session = request.getSession(false);
-
-        var userId = session.getAttribute("USER_ID").toString();
-
-        if (userId.isEmpty()) {
-            throw new IllegalStateException("Session not found account doesn't exist.");
-        }
-
-        return ResponseEntity.ok(signUpServices.checkOTPverification(userId));
-    }
-
 
 }

@@ -44,7 +44,8 @@ public class Mapper {
                     userCredentialsDTO.getNin(),
                     userCredentialsDTO.getPhone(),
                     userCredentialsDTO.getEmail(),
-                    userCredentialsDTO.getPassword()
+                    userCredentialsDTO.getPassword(),
+                        null
             );
 
         } catch (Exception e) {
