@@ -29,12 +29,16 @@ public class AuthController {
      * Login endpoint to create a fresh secure session
      */
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(
+    public ResponseEntity<Map<String, Object>> login(
             @RequestBody LoginRequest loginRequest,
             HttpServletRequest request) {
 
         // 1. Authenticate user against database & hash comparison
         UserCredentialsEntity user = signUpServices.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
         // 2. Create or fetch active HTTP session
         HttpSession session = request.getSession(true);
@@ -44,7 +48,12 @@ public class AuthController {
         VerificationRequestEntity vr = verificationRepoRepo.findUserByAccountId(user.getAccountId());
         session.setAttribute("ROLES", vr.getRole()); // e.g., ["ROLE_USER"]
 
-        return ResponseEntity.ok(Map.of("message", "Logged in successfully"));
+        return ResponseEntity.ok(Map.of(
+                "message", "Logged in successfully",
+                "loginStatus", true,
+                "sessionId", session.getId(),
+                "userId", user.getAccountId().toString()
+        ));
     }
 
     /**

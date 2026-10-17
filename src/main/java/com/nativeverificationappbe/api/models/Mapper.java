@@ -55,4 +55,27 @@ public class Mapper {
 
     }
 
+
+    public AddressEntity addressDTOtoEntity(AddressDetails addressDTO) {
+
+        try {
+
+            return new AddressEntity(
+                    null,
+                    addressDTO.getUserAddress().getNumber(),
+                    addressDTO.getUserAddress().getBuildingName(),
+                    addressDTO.getUserAddress().getStreet(),
+                    addressDTO.getUserAddress().getCity(),
+                    addressDTO.getUserAddress().getState(),
+                    addressDTO.getUserAddress().getPostalCode(),
+                    addressDTO.getUserAddress().getDescription(),
+                    addressDTO.getUserAddress().getLatitude(),
+                    addressDTO.getUserAddress().getLongitude()
+            );
+        } catch (Exception e) {
+            logger.error("Failed to map addressDTO to Entity.");
+            throw new IllegalStateException("Mapping address entity failed. ", e);
+        }
+    }
+
 }
