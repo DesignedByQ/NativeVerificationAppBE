@@ -48,4 +48,6 @@ public class Controller {
 
         return ResponseEntity.ok(signUpServices.checkOTPverification(userId));
     }
+
+    upload docs - need a db table , model
 }
