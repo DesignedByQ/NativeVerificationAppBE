@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class Mapper {
 
@@ -75,6 +77,22 @@ public class Mapper {
         } catch (Exception e) {
             logger.error("Failed to map addressDTO to Entity.");
             throw new IllegalStateException("Mapping address entity failed. ", e);
+        }
+    }
+
+    public DocumentEntity documentDTOtoEntity(DocumentDTO documentDTO, UserCredentialsEntity userCredentialsEntity) {
+        try {
+            return new DocumentEntity(
+                    null,
+                    documentDTO.getNationalId(),
+                    documentDTO.getVotersCard(),
+                    documentDTO.getDriversLicense(),
+                    documentDTO.getPassport(),
+                    userCredentialsEntity
+            );
+        } catch (Exception e) {
+            logger.error("Failed to map documentDTO to Entity.", e);
+            throw new RuntimeException("Mapping failed", e);
         }
     }
 
