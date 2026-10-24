@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 public class Mapper {
 
@@ -80,20 +78,35 @@ public class Mapper {
         }
     }
 
-    public DocumentEntity documentDTOtoEntity(DocumentDTO documentDTO, UserCredentialsEntity userCredentialsEntity) {
-        try {
-            return new DocumentEntity(
-                    null,
-                    documentDTO.getNationalId(),
-                    documentDTO.getVotersCard(),
-                    documentDTO.getDriversLicense(),
-                    documentDTO.getPassport(),
-                    userCredentialsEntity
-            );
-        } catch (Exception e) {
-            logger.error("Failed to map documentDTO to Entity.", e);
-            throw new RuntimeException("Mapping failed", e);
-        }
-    }
+//    public DocumentEntity documentDTOtoEntity(DocumentDTO documentDTO, UserCredentialsEntity userCredentialsEntity) {
+//        try {
+//
+//            if (documentDTO.getDocumentType().equals("NATIONAL_ID")) {
+//
+//                return  new DocumentEntity(
+//                        documentDTO.getDocumentNumber(),
+//                        documentDTO.getDocumentImage(),
+//                        documentDTO.getDocumentExpiration(),
+//                )
+//            }
+//            return new DocumentEntity(
+//                    null,
+//
+//                    documentDTO.getVotersCard().getDocNumber(),
+//                    documentDTO.getVotersCard().getDocImage(),
+//                    documentDTO.getVotersCard().getDocExpiry(),
+//                    documentDTO.getDriversLicense().getDocNumber(),
+//                    documentDTO.getDriversLicense().getDocImage(),
+//                    documentDTO.getDriversLicense().getDocExpiry(),
+//                    documentDTO.getPassport().getDocNumber(),
+//                    documentDTO.getPassport().getDocImage(),
+//                    documentDTO.getPassport().getDocExpiry(),
+//                    userCredentialsEntity
+//            );
+//        } catch (Exception e) {
+//            logger.error("Failed to map documentDTO to Entity.", e);
+//            throw new RuntimeException("Mapping failed", e);
+//        }
+//    }
 
 }

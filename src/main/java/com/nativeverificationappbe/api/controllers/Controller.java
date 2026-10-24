@@ -51,7 +51,7 @@ public class Controller {
         return ResponseEntity.ok(signUpServices.checkOTPverification(userId));
     }
 
-    @PostMapping(value = "documents", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/documents", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Map<String, Boolean>> uploadDocuments(@RequestBody DocumentDTO documentDTO, HttpServletRequest request){
 
         HttpSession session = request.getSession(false);

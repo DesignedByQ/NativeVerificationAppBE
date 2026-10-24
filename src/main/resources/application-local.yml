@@ -9,7 +9,8 @@ spring:
       ddl-auto: update
     show-sql: true
 
-  X-Api-Key: ${API_KEY:}
+app:
+  api-Key: ${API_KEY:}
 
 server:
   servlet:

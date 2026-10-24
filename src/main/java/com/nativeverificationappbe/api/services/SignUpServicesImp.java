@@ -181,6 +181,8 @@ public class SignUpServicesImp implements SignUpServices {
 
             logger.info("Account created successfully.");
 
+
+
 //            session.setAttribute("user_id", user.accountId.toString())
 //            session.setAttribute("is_verified", true)
 //            MDC.put("userId", user.accountId.toString())
