@@ -45,25 +45,23 @@ public class OperationalServicesImp implements OperationalServices{
         // 2. Handle document types dynamically
         switch (documentDTO.getDocumentType()) {
             case "NATIONAL_ID" -> {
-                validateExpiration(documentDTO.getDocumentExpiration(), userDocs.getNationalDocExpiry(), documentDTO.getDocumentType());
+                validateExpiration(documentDTO, userDocs, documentDTO.getDocumentType());
                 userDocs.setNationalDocNumber(documentDTO.getDocumentNumber());
                 userDocs.setNationalDocImage(documentDTO.getDocumentImage());
-                userDocs.setNationalDocExpiry(documentDTO.getDocumentExpiration());
             }
             case "VOTERS_CARD" -> {
-                validateExpiration(documentDTO.getDocumentExpiration(), userDocs.getVotersDocExpiry(), documentDTO.getDocumentType());
+                validateExpiration(documentDTO, userDocs, documentDTO.getDocumentType());
                 userDocs.setVotersDocNumber(documentDTO.getDocumentNumber());
                 userDocs.setVotersDocImage(documentDTO.getDocumentImage());
-                userDocs.setVotersDocExpiry(documentDTO.getDocumentExpiration());
             }
             case "DRIVERS_LICENSE" -> {
-                validateExpiration(documentDTO.getDocumentExpiration(), userDocs.getDriversDocExpiry(), documentDTO.getDocumentType());
+                validateExpiration(documentDTO, userDocs, documentDTO.getDocumentType());
                 userDocs.setDriversDocNumber(documentDTO.getDocumentNumber());
                 userDocs.setDriversDocImage(documentDTO.getDocumentImage());
                 userDocs.setDriversDocExpiry(documentDTO.getDocumentExpiration());
             }
             case "PASSPORT" -> {
-                validateExpiration(documentDTO.getDocumentExpiration(), userDocs.getPassportDocExpiry(), documentDTO.getDocumentType());
+                validateExpiration(documentDTO, userDocs, documentDTO.getDocumentType());
                 userDocs.setPassportDocNumber(documentDTO.getDocumentNumber());
                 userDocs.setPassportDocImage(documentDTO.getDocumentImage());
                 userDocs.setPassportDocExpiry(documentDTO.getDocumentExpiration());
@@ -81,12 +79,39 @@ public class OperationalServicesImp implements OperationalServices{
 
 
     // Safe helper method to compare date strings without NullPointerExceptions
-    private void validateExpiration(String incomingExpiry, String existingExpiry, String docName) {
-        if (existingExpiry != null && incomingExpiry != null) {
+    private void validateExpiration(DocumentDTO incoming, DocumentEntity existing, String docName) {
+        if (incoming != null && existing != null) {
             // If existing expiration is LATER than incoming expiration, reject
-            if (existingExpiry.compareTo(incomingExpiry) <= 0) {
-                throw new IllegalStateException("A newer " + docName + " document already exists.");
+
+            switch (docName) {
+                case "NATIONAL_ID" -> {
+                    if (existing.getNationalDocNumber() != null) {
+                        throw new IllegalStateException("User's " + docName + " document already exists on the system.");
+                    }
+                }
+                case "VOTERS_CARD" -> {
+                    if (existing.getVotersDocNumber() != null) {
+                        throw new IllegalStateException("User's " + docName + " document already exists on the system.");
+                    }
+                }
+                case "DRIVERS_LICENSE" -> {
+                    if (existing.getDriversDocNumber() != null) {
+                        if (incoming.getDocumentNumber().equals(existing.getDriversDocNumber()) || incoming.getDocumentExpiration().compareTo(existing.getDriversDocExpiry()) <= 0) {
+                            throw new IllegalStateException("The same or newer " + docName + " document already exists on the system.");
+                        }
+                    }
+                }
+                case "PASSPORT" -> {
+                    if (existing.getPassportDocNumber() != null) {
+                        if (incoming.getDocumentNumber().equals(existing.getPassportDocNumber()) || incoming.getDocumentExpiration().compareTo(existing.getPassportDocExpiry()) <= 0) {
+                            throw new IllegalStateException("The same or newer " + docName + " document already exists on the system.");
+                        }
+                    }
+                }
+                default -> throw new IllegalArgumentException("Unsupported document type: " + docName);
             }
+
+
         }
     }
 

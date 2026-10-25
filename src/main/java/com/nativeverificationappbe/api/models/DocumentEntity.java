@@ -25,9 +25,6 @@ public class DocumentEntity {
     @Column(name = "national_doc_image", columnDefinition = "TEXT")
     private String nationalDocImage;
 
-    @Column(name = "national_doc_expiry")
-    private String nationalDocExpiry;
-
     // Voter's Card
     @Column(name = "voters_doc_number")
     private String votersDocNumber;
@@ -35,9 +32,6 @@ public class DocumentEntity {
     @Lob
     @Column(name = "voters_doc_image", columnDefinition = "TEXT")
     private String votersDocImage;
-
-    @Column(name = "voters_doc_expiry")
-    private String votersDocExpiry;
 
     // Driver's License
     @Column(name = "drivers_doc_number")
