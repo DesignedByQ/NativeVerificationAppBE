@@ -7,7 +7,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
+
+logging:
+  level:
+    org.hibernate.SQL: OFF
+    org.hibernate.orm.jdbc.bind: OFF
 
 app:
   api-Key: ${API_KEY:}

@@ -43,6 +43,11 @@ public class AuthController {
         // 2. Create or fetch active HTTP session
         HttpSession session = request.getSession(true);
 
+        System.out.println("Session ID: " + session.getId());
+        System.out.println("Session cookie name: " +
+                request.getSession().getServletContext()
+                        .getSessionCookieConfig().getName());
+
         // 3. Dynamically set session attributes from DB record
         session.setAttribute("USER_ID", user.getAccountId());
         VerificationRequestEntity vr = verificationRepoRepo.findUserByAccountId(user.getAccountId());

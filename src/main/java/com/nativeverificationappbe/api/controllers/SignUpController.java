@@ -3,6 +3,7 @@ package com.nativeverificationappbe.api.controllers;
 import com.nativeverificationappbe.api.models.NINandSelfieDTO;
 import com.nativeverificationappbe.api.models.OTPrequest;
 import com.nativeverificationappbe.api.models.UserCredentialsDTO;
+import com.nativeverificationappbe.api.repos.UserCredRepo;
 import com.nativeverificationappbe.api.services.SignUpServicesImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +23,8 @@ import org.springframework.http.HttpStatus;
 public class SignUpController {
 
     private final SignUpServicesImp signUpServices;
+
+    private final UserCredRepo userCredRepo;
 
     private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
@@ -123,6 +126,50 @@ public class SignUpController {
                         "accountCreated", "false"
                         )
         );
+
+    }
+
+    //gets the phone from user id then sends to persist otp
+    @GetMapping(value = "/otp", produces = "application/json")
+    public ResponseEntity<Map<String, String>> triggerOTP(HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+
+        String user_id = session.getAttribute("USER_ID").toString();
+
+        Long userId = Long.parseLong(user_id);
+
+        //Get phone number
+        String number = userCredRepo.getReferenceById(userId).getPhone();
+
+        if (number == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(
+                    Map.of(
+                        "status", HttpStatus.BAD_REQUEST.toString(),
+                        "message", "User does not exist or has no phone number."
+                    )
+                );
+        }
+
+        if (signUpServices.persistOTP(number)) {
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(
+                    Map.of(
+                        "status", HttpStatus.OK.toString(),
+                        "message", "New OTP persisted successfully.",
+                        "signUpId", user_id,
+                        "sessionId", session.getId()
+                        )
+                );
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of(
+                    "status", HttpStatus.BAD_REQUEST.toString(),
+                    "message", "Error trying to add new OTP to entity."
+                )
+            );
+        }
 
     }
 
