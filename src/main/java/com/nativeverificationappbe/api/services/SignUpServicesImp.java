@@ -3,12 +3,14 @@ package com.nativeverificationappbe.api.services;
 import com.nativeverificationappbe.api.models.*;
 import com.nativeverificationappbe.api.repos.UserCredRepo;
 import com.nativeverificationappbe.api.repos.VerificationRepo;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,8 @@ public class SignUpServicesImp implements SignUpServices {
     private final Mapper mapper;
 
     private final CommunicationServicesImp communicationServicesImp;
+
+    private final OperationalServicesImp operationalServicesImp;
 
     private final WebClient webClient = WebClient.builder()
             .baseUrl("https://api.prembly.com")
@@ -172,6 +176,7 @@ public class SignUpServicesImp implements SignUpServices {
 
             VerificationRequestEntity associatedVerificationRequest = new VerificationRequestEntity();
             associatedVerificationRequest.setUserCredentialsEntity(user);
+            associatedVerificationRequest.setConfidenceScore(50);
 
             verificationRepo.save(associatedVerificationRequest);
 
@@ -223,15 +228,13 @@ public class SignUpServicesImp implements SignUpServices {
 
                 UserCredentialsEntity user = optionalUser.get();
 
-                VerificationRequestEntity getUser = verificationRepo.findUserByAccountId(user.getAccountId());
+                VerificationRequestEntity getUser = verificationRepo.findUserByAccountId(user.getAccountId())
+                        .orElseThrow(() -> new EntityNotFoundException("User not found."));
 
-                if (getUser != null) {
-                    getUser.setEmailOTP(newOTP);
-                    getUser.setOtpCreatedAt(LocalDateTime.now());
-                    verificationRepo.save(getUser);
-                    logger.info("Saved new email OTP to entity: {}", user.getEmail());
-
-                }
+                getUser.setEmailOTP(newOTP);
+                getUser.setOtpCreatedAt(LocalDateTime.now());
+                verificationRepo.save(getUser);
+                logger.info("Saved new email OTP to entity: {}", user.getEmail());
 
                 communicationServicesImp.initiateEmailService(contact, newOTP);
 
@@ -253,15 +256,13 @@ public class SignUpServicesImp implements SignUpServices {
 
                 UserCredentialsEntity user = optionalUser.get();
 
-                VerificationRequestEntity getUser = verificationRepo.findUserByAccountId(user.getAccountId());
+                VerificationRequestEntity getUser = verificationRepo.findUserByAccountId(user.getAccountId())
+                        .orElseThrow(() -> new EntityNotFoundException("User not found."));
 
-                if (getUser != null) {
-                    getUser.setPhoneOTP(newOTP);
-                    getUser.setOtpCreatedAt(LocalDateTime.now());
-                    verificationRepo.save(getUser);
-                    logger.info("Saved new phone OTP to entity: {}", user.getEmail());
-
-                }
+                getUser.setPhoneOTP(newOTP);
+                getUser.setOtpCreatedAt(LocalDateTime.now());
+                verificationRepo.save(getUser);
+                logger.info("Saved new phone OTP to entity: {}", user.getEmail());
 
                 communicationServicesImp.initiatePhoneService(contact, newOTP);
 
@@ -307,17 +308,15 @@ public class SignUpServicesImp implements SignUpServices {
 
         UserCredentialsEntity user = userCredRepo.findUserSignUpByEmail(email);
 
-        if (user == null) {
-            logger.warn("Login credentials not matched.");
+        VerificationRequestEntity verifiedUser = verificationRepo.findUserByAccountId(user.getAccountId())
+                .orElseThrow(() -> new EntityNotFoundException("Login credentials not matched."));
+
+        if (!user.getPassword().equals(password)) {
+            logger.warn("Password is not recognised.");
             return null;
-        } else {
-
-            if (!user.getPassword().equals(password)) {
-                logger.warn("Password is not recognised.");
-                return null;
-            }
-
         }
+
+        operationalServicesImp.updateConfidenceScore(verifiedUser);
 
         return user;
 
@@ -329,7 +328,8 @@ public class SignUpServicesImp implements SignUpServices {
         Long userId = Long.parseLong(user_id);
         int otpRequest = Integer.parseInt(otp_request);
 
-        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId);
+        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found."));
 
         var currentOtp = user.getPhoneOTP();
         var createdAt = user.getOtpCreatedAt();
@@ -359,6 +359,7 @@ public class SignUpServicesImp implements SignUpServices {
             user.setPhoneOTP(null);
             user.setOtpCreatedAt(null);
             user.setPhoneVerified(true);
+            user.setConfidenceScore(53);
             verificationRepo.save(user);
 
             logger.info("Now persisting Email OTP.");
@@ -377,7 +378,8 @@ public class SignUpServicesImp implements SignUpServices {
         Long userId = Long.parseLong(user_id);
         int otpRequest = Integer.parseInt(otp_request);
 
-        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId);
+        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found."));
 
         var currentOtp = user.getEmailOTP();
         var createdAt = user.getOtpCreatedAt();
@@ -407,6 +409,7 @@ public class SignUpServicesImp implements SignUpServices {
             user.setEmailOTP(null);
             user.setOtpCreatedAt(null);
             user.setEmailVerified(true);
+            user.setConfidenceScore(55);
             verificationRepo.save(user);
 
             return true;
@@ -420,15 +423,8 @@ public class SignUpServicesImp implements SignUpServices {
 
         Long userId = Long.parseLong(user_id);
 
-        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId);
-
-        if (user == null) {
-            logger.warn("User not found.");
-            return Map.of(
-                    "emailVerification", false,
-                    "phoneVerification", false
-            );
-        }
+        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found."));
 
         return Map.of(
                 "emailVerification", user.getEmailVerified(),

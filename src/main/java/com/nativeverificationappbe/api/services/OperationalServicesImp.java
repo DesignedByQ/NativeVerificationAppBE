@@ -2,8 +2,11 @@ package com.nativeverificationappbe.api.services;
 
 import com.nativeverificationappbe.api.models.DocumentDTO;
 import com.nativeverificationappbe.api.models.DocumentEntity;
+import com.nativeverificationappbe.api.models.UserCredentialsEntity;
+import com.nativeverificationappbe.api.models.VerificationRequestEntity;
 import com.nativeverificationappbe.api.repos.DocumentRepo;
 import com.nativeverificationappbe.api.repos.UserCredRepo;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -115,4 +118,49 @@ public class OperationalServicesImp implements OperationalServices{
         }
     }
 
+    //Get user details to display in profile section
+    @Override
+    public UserCredentialsEntity getUserCredentials(String user_id) {
+
+        Long userId = Long.parseLong(user_id);
+
+        return userCredRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("User credentials not found: " + userId));
+    }
+
+    @Override
+    public void updateConfidenceScore(VerificationRequestEntity verifiedUser) {
+
+        DocumentEntity userDocs = documentRepo.findUserByAccountId(verifiedUser.getUserCredentialsEntity().getAccountId());
+
+        //60 means NIN Card image has been manually checked against liveliness photo
+
+        if (Boolean.TRUE.equals(verifiedUser.getManuallyVerified())) {
+
+            if (userDocs.getNationalDocImage() != null && userDocs.getVotersDocImage() != null && userDocs.getDriversDocImage() != null && userDocs.getPassportDocImage() != null) {
+                verifiedUser.setConfidenceScore(80);
+            } else if (userDocs.getNationalDocImage() != null && userDocs.getDriversDocImage() != null && userDocs.getPassportDocImage() != null) {
+                verifiedUser.setConfidenceScore(77);
+            } else if (userDocs.getNationalDocImage() != null && userDocs.getVotersDocImage() != null && userDocs.getPassportDocImage() != null) {
+                verifiedUser.setConfidenceScore(75);
+            } else if (userDocs.getNationalDocImage() != null && userDocs.getVotersDocImage() != null && userDocs.getDriversDocImage() != null) {
+                verifiedUser.setConfidenceScore(72);
+            } else if (userDocs.getNationalDocImage() != null && userDocs.getPassportDocImage() != null) {
+                verifiedUser.setConfidenceScore(70);
+            } else if (userDocs.getNationalDocImage() != null && userDocs.getDriversDocImage() != null) {
+                verifiedUser.setConfidenceScore(66);
+            } else if (userDocs.getNationalDocImage() != null && userDocs.getVotersDocImage() != null) {
+                verifiedUser.setConfidenceScore(63);
+            } else if (userDocs.getNationalDocImage() != null) {
+                verifiedUser.setConfidenceScore(60);
+            }
+
+            //Add address verified
+            if (verifiedUser.getAddressVerified() == true) {
+                verifiedUser.setConfidenceScore(verifiedUser.getConfidenceScore() + 10);
+            }
+
+            //if the passport /license is expired , downgrade the score
+        }
+
+    }
 }

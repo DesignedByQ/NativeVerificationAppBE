@@ -32,4 +32,8 @@ public class VerificationRequestEntity {
     private Boolean addressVerified = false;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Column(name = "signature", columnDefinition = "TEXT")
+    private String signature;
+    private Integer confidenceScore;
+    private Boolean manuallyVerified = false;
 }

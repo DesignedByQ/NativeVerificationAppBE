@@ -1,13 +1,18 @@
 package com.nativeverificationappbe.api.controllers;
 
 import com.nativeverificationappbe.api.models.DocumentDTO;
+import com.nativeverificationappbe.api.models.UserCredentialsEntity;
+import com.nativeverificationappbe.api.models.VerificationRequestEntity;
+import com.nativeverificationappbe.api.repos.VerificationRepo;
 import com.nativeverificationappbe.api.services.OperationalServicesImp;
 import com.nativeverificationappbe.api.services.SignUpServicesImp;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +29,32 @@ public class Controller {
 
     private final OperationalServicesImp operationalServices;
 
+    private final VerificationRepo verificationRepo;
+
     @GetMapping(value = "/getuserid", produces = "application/json")
     public ResponseEntity<String> getUserId(HttpServletRequest request){
 
         HttpSession session = request.getSession(false);
 
-        String userId = session.getAttribute("USER_ID").toString();
+        String user_id = session.getAttribute("USER_ID").toString();
 
-        return ResponseEntity.ok(userId);
+        return ResponseEntity.ok(user_id);
+
+    }
+
+    @GetMapping(value = "/getconfidencescore", produces = "application/json")
+    public ResponseEntity<Integer> getConfidenceScore(HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+
+        String user_id = session.getAttribute("USER_ID").toString();
+
+        Long userId = Long.parseLong(user_id);
+
+        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        return ResponseEntity.status(HttpStatus.OK).body(user.getConfidenceScore());
 
     }
 
@@ -58,7 +81,7 @@ public class Controller {
 
         if (session == null) {
             throw new IllegalStateException("Session is null.");
-            //return session timedout
+            //return session timed out
         }
 
         var userId = session.getAttribute("USER_ID").toString();
@@ -73,4 +96,28 @@ public class Controller {
                 Map.of("documentUploaded", documentUploaded));
     }
     //upload docs - controller method the front end need a service that verifies the document beofre storing
+
+    @GetMapping(value = "/userdata", produces = "application/json")
+    public ResponseEntity<Map<String, String>> getUserData(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+
+        String userId = session.getAttribute("USER_ID").toString();
+
+        UserCredentialsEntity user = operationalServices.getUserCredentials(userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+                "title", user.getTitle(),
+                "firstName", user.getFirstname(),
+                "middleName", user.getMiddlename(),
+                "lastName", user.getSurname(),
+                "birthdate", user.getBirthdate(),
+                "email", user.getEmail(),
+                "phone", user.getPhone(),
+                "gender", user.getGender(),
+                "livelinessPhoto", user.getLivelinessPhoto()
+        ));
+    }
+
+
+    //get confidence score
 }

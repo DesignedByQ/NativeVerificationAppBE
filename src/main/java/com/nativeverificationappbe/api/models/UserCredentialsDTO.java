@@ -19,5 +19,6 @@ public class UserCredentialsDTO {
     private String phone;
     private String email;
     private String password;
+    private String livelinessPhoto;
 
 }

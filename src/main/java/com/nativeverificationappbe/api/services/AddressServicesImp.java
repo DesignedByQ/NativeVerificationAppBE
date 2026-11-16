@@ -5,6 +5,7 @@ import com.nativeverificationappbe.api.repos.AddressRepo;
 import com.nativeverificationappbe.api.repos.UserCredRepo;
 import com.nativeverificationappbe.api.repos.VerificationRepo;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,17 +36,14 @@ public class AddressServicesImp implements  AddressServices {
 
             UserCredentialsEntity user = userCredRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-            VerificationRequestEntity verification = verificationRepo.findUserByAccountId(user.getAccountId());
+            VerificationRequestEntity verification = verificationRepo.findUserByAccountId(user.getAccountId())
+                    .orElseThrow(() -> new EntityNotFoundException("Verification record not found for accountId: " + user.getAccountId()));
 
-            if (verification == null) {
-                throw new EntityNotFoundException("Verification record not found for accountId: ${user.accountId}");
-            } else {
+            return Map.of(
+                    "userAddress", user.getAddress(),
+                    "verification", verification.getAddressVerified()
+            );
 
-                return Map.of(
-                        "userAddress", user.getAddress(),
-                        "verification", verification.getAddressVerified()
-                );
-            }
         } catch (Exception e) {
             logger.error("Error retrieving user's address.");
             return Map.of(
@@ -111,6 +109,20 @@ public class AddressServicesImp implements  AddressServices {
         logger.info("{} is {} meters within their saved address.", userId, distanceMeters);
 
         return distanceMeters;
+    }
+
+    @Override
+    @Transactional // Ensures automatic dirty-checking and database synchronization
+    public Boolean saveUserSignature(String signature, String userIdStr) {
+        Long userId = Long.parseLong(userIdStr);
+
+        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Verification record not found for accountId: " + userIdStr));
+
+        user.setSignature(signature);
+        verificationRepo.save(user); // Optional if @Transactional is present, but good for explicit intent
+
+        return true; // If it reaches here without exception, the save/update succeeded
     }
 
 }

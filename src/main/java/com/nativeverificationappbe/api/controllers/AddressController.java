@@ -2,6 +2,7 @@ package com.nativeverificationappbe.api.controllers;
 
 import com.nativeverificationappbe.api.models.AddressDetails;
 import com.nativeverificationappbe.api.models.CoordsDetails;
+import com.nativeverificationappbe.api.models.SignatureDTO;
 import com.nativeverificationappbe.api.services.AddressServicesImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,8 +20,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AddressController {
 
-
     private final static Logger logger = LoggerFactory.getLogger(AddressController.class);
+
     private final AddressServicesImp addressServices;
 
     @GetMapping(value = "/getaddress", produces = "application/json")
@@ -108,6 +109,26 @@ public class AddressController {
 
 
         //Get the address coords from the db
+    }
+
+    @PostMapping(value = "/savesignature", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<Boolean> saveSignature(@RequestBody SignatureDTO signatureDTO, HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+
+        // Safely check session and attribute existence to prevent NullPointerException
+        if (session == null || session.getAttribute("USER_ID") == null) {
+            logger.error("Signature failed to save: No active session or user ID found.");
+            return ResponseEntity.badRequest().body(false);
+        }
+
+        String userId = session.getAttribute("USER_ID").toString();
+
+        logger.info("Attempting to save signature for userId: {}", userId);
+
+        Boolean isSaved = addressServices.saveUserSignature(signatureDTO.getSignature(), userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(isSaved);
     }
 
 }

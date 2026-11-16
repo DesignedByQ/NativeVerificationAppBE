@@ -5,6 +5,7 @@ import com.nativeverificationappbe.api.models.UserCredentialsEntity;
 import com.nativeverificationappbe.api.models.VerificationRequestEntity;
 import com.nativeverificationappbe.api.repos.VerificationRepo;
 import com.nativeverificationappbe.api.services.SignUpServicesImp;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,10 @@ public class AuthController {
 
         // 3. Dynamically set session attributes from DB record
         session.setAttribute("USER_ID", user.getAccountId());
-        VerificationRequestEntity vr = verificationRepoRepo.findUserByAccountId(user.getAccountId());
+
+        VerificationRequestEntity vr = verificationRepoRepo.findUserByAccountId(user.getAccountId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+
         session.setAttribute("ROLES", vr.getRole()); // e.g., ["ROLE_USER"]
 
         return ResponseEntity.ok(Map.of(

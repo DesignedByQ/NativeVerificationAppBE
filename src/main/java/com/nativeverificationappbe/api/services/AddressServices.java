@@ -11,4 +11,6 @@ public interface AddressServices {
     Boolean saveUserAddress(String user_id, AddressDetails addressDTO);
 
     Double calculateRangeInMeters(Double deviceLat, Double deviceLng, String user_id);
+
+    Boolean saveUserSignature(String signature, String user_id);
 }

@@ -21,6 +21,7 @@ public class Mapper {
                     premblyResponseData.getNin(),
                     premblyResponseData.getTelephoneno(),
                     premblyResponseData.getEmail(),
+                    null,
                     null
             );
         } catch (Exception e) {
@@ -45,7 +46,8 @@ public class Mapper {
                     userCredentialsDTO.getPhone(),
                     userCredentialsDTO.getEmail(),
                     userCredentialsDTO.getPassword(),
-                        null
+                    userCredentialsDTO.getLivelinessPhoto(),
+                    null
             );
 
         } catch (Exception e) {
