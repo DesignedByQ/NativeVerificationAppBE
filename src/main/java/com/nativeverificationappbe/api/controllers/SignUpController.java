@@ -3,8 +3,10 @@ package com.nativeverificationappbe.api.controllers;
 import com.nativeverificationappbe.api.models.NINandSelfieDTO;
 import com.nativeverificationappbe.api.models.OTPrequest;
 import com.nativeverificationappbe.api.models.UserCredentialsDTO;
+import com.nativeverificationappbe.api.models.UserCredentialsEntity;
 import com.nativeverificationappbe.api.repos.UserCredRepo;
 import com.nativeverificationappbe.api.services.SignUpServicesImp;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -140,8 +142,11 @@ public class SignUpController {
         Long userId = Long.parseLong(user_id);
 
         //Get phone number
-        String number = userCredRepo.getReferenceById(userId).getPhone();
+        UserCredentialsEntity user = userCredRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
 
+        String number = user.getPhone();
+        logger.info(number);
         if (number == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(
@@ -180,7 +185,7 @@ public class SignUpController {
 
         String userId = session.getAttribute("USER_ID").toString();
 
-        logger.info("Confirming OTP matches for: {}", userId);
+        logger.info("[/phoneotp] Confirming OTP matches for: {}", userId);
 
         return ResponseEntity.ok(signUpServices.checkPhoneOTPmatches(otp.getOtp(), userId));
 
@@ -193,7 +198,7 @@ public class SignUpController {
 
         String userId = session.getAttribute("USER_ID").toString();
 
-        logger.info("Confirming OTP matches for: {}", userId);
+        logger.info("[/emailotp] Confirming OTP matches for: {}", userId);
 
         Boolean otpVerified = signUpServices.checkEmailOTPmatches(otp.getOtp(), userId);
 
@@ -201,6 +206,84 @@ public class SignUpController {
                 "sessionId", session.getId(),
                 "sessionUser", userId,
                 "otpVerified", otpVerified.toString()));
+    }
+
+    @PostMapping(value = "/updateemailotp", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Map<String, String>> receiveEmailOTPfromUserToUpdate(@RequestBody OTPrequest otp, HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+
+        String userId = session.getAttribute("USER_ID").toString();
+
+        logger.info("[/updateemailotp] Confirming OTP matches for: {}", userId);
+
+        Boolean otpVerified = signUpServices.checkEmailOTPmatches(otp.getOtp(), userId);
+        //create another endpoint to check the otp match but also update the email to new one from usercredentialupate variable
+        logger.info("otpVerified: {}", otpVerified);
+        Boolean emailUpdated = null;
+
+        if (otpVerified) {
+            //get user and update email and nullify other
+            emailUpdated = signUpServices.updateEmail(userId);
+        }
+        logger.info("emailUpdated: {}", emailUpdated);
+        return ResponseEntity.ok(Map.of(
+                "sessionId", session.getId(),
+                "sessionUser", userId,
+                "otpVerified", otpVerified.toString(),
+                "emailUpdated", String.valueOf(emailUpdated)));
+    }
+
+    @PostMapping(value = "/updatephoneotp", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Map<String, String>> receivePhoneOTPfromUserToUpdate(@RequestBody OTPrequest otp, HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+
+        String userId = session.getAttribute("USER_ID").toString();
+
+        logger.info("[/updatephoneotp] Confirming OTP matches for: {}", userId);
+
+        Boolean otpVerified = signUpServices.checkPhoneOTPmatches(otp.getOtp(), userId);
+        //create another endpoint to check the otp match but also update the email to new one from usercredentialupate variable
+        logger.info("otpVerified: {}", otpVerified);
+        Boolean phoneUpdated = null;
+
+        if (otpVerified) {
+            //get user and update email and nullify other
+            phoneUpdated = signUpServices.updatePhone(userId);
+        }
+        logger.info("phoneUpdated: {}", phoneUpdated);
+        return ResponseEntity.ok(Map.of(
+                "sessionId", session.getId(),
+                "sessionUser", userId,
+                "otpVerified", otpVerified.toString(),
+                "phoneUpdated", String.valueOf(phoneUpdated)));
+    }
+
+    @PostMapping(value = "/updatepasswordotp", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Map<String, String>> receivePasswordOTPfromUserToUpdate(@RequestBody OTPrequest otp, HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+
+        String userId = session.getAttribute("USER_ID").toString();
+
+        logger.info("[/updatepasswordotp] Confirming OTP matches for: {}", userId);
+
+        Boolean otpVerified = signUpServices.checkPasswordOTPmatches(otp.getOtp(), userId);
+
+        logger.info("otpVerified: {}", otpVerified);
+        Boolean passwordUpdated = null;
+
+        if (otpVerified) {
+            //get user and update email and nullify other
+            passwordUpdated = signUpServices.updatePassword(userId);
+        }
+        logger.info("emailUpdated: {}", passwordUpdated);
+        return ResponseEntity.ok(Map.of(
+                "sessionId", session.getId(),
+                "sessionUser", userId,
+                "otpVerified", otpVerified.toString(),
+                "emailUpdated", String.valueOf(passwordUpdated)));
     }
 
 }

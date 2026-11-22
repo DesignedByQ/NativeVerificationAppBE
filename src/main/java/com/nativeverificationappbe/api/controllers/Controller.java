@@ -1,9 +1,11 @@
 package com.nativeverificationappbe.api.controllers;
 
 import com.nativeverificationappbe.api.models.DocumentDTO;
+import com.nativeverificationappbe.api.models.UpdateUserDTO;
 import com.nativeverificationappbe.api.models.UserCredentialsEntity;
 import com.nativeverificationappbe.api.models.VerificationRequestEntity;
 import com.nativeverificationappbe.api.repos.VerificationRepo;
+import com.nativeverificationappbe.api.services.CommunicationServicesImp;
 import com.nativeverificationappbe.api.services.OperationalServicesImp;
 import com.nativeverificationappbe.api.services.SignUpServicesImp;
 import jakarta.persistence.EntityNotFoundException;
@@ -95,7 +97,7 @@ public class Controller {
         return ResponseEntity.ok(
                 Map.of("documentUploaded", documentUploaded));
     }
-    //upload docs - controller method the front end need a service that verifies the document beofre storing
+    //upload docs - controller method the front end need a service that verifies the document before storing
 
     @GetMapping(value = "/userdata", produces = "application/json")
     public ResponseEntity<Map<String, String>> getUserData(HttpServletRequest request){
@@ -104,6 +106,8 @@ public class Controller {
         String userId = session.getAttribute("USER_ID").toString();
 
         UserCredentialsEntity user = operationalServices.getUserCredentials(userId);
+
+        //logger.info(String.valueOf(user));
 
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
                 "title", user.getTitle(),
@@ -114,10 +118,51 @@ public class Controller {
                 "email", user.getEmail(),
                 "phone", user.getPhone(),
                 "gender", user.getGender(),
+                "nin", user.getNin(),
                 "livelinessPhoto", user.getLivelinessPhoto()
         ));
     }
 
 
-    //get confidence score
+    @PostMapping(value = "/update-email", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Boolean> updateEmail(@RequestBody UpdateUserDTO newEmail, HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+
+        String userId = session.getAttribute("USER_ID").toString();
+
+        logger.info(session.getId());
+        logger.info(userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(signUpServices.updateEmailNotification(newEmail.getEmail(), userId));
+
+    }
+
+    @PostMapping(value = "/update-phone", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Boolean> updatePhone(@RequestBody UpdateUserDTO newNumber, HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+
+        String userId = session.getAttribute("USER_ID").toString();
+
+        logger.info(session.getId());
+        logger.info(userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(signUpServices.updatePhoneNotification(newNumber.getPhone(), userId));
+
+    }
+
+    @PostMapping(value = "/update-password", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Boolean> updatePassword(@RequestBody UpdateUserDTO newPassword, HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+
+        String userId = session.getAttribute("USER_ID").toString();
+
+        logger.info(session.getId());
+        logger.info(userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(signUpServices.updatePasswordNotification(newPassword.getPassword(), userId));
+
+    }
 }

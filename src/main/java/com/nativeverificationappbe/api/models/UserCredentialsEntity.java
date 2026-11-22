@@ -35,6 +35,7 @@ public class UserCredentialsEntity {
     @Column(unique = true)
     private String email;
     private String password;
+    @Column(name = "liveliness_photo", columnDefinition = "TEXT")
     private String livelinessPhoto;
     @OneToOne
     @JoinColumn(name="address", nullable=true)

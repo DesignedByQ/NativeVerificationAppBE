@@ -10,6 +10,8 @@ import brevoModel.SendSmtpEmail;
 import brevoModel.SendSmtpEmailSender;
 import brevoModel.SendSmtpEmailTo;
 import brevoModel.SendTransacSms;
+import com.nativeverificationappbe.api.models.VerificationRequestEntity;
+import com.nativeverificationappbe.api.repos.VerificationRepo;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +69,6 @@ public class CommunicationServicesImp implements CommunicationServices {
             return "Error sending email";
         }
 
-
     }
 
     @Override
@@ -113,6 +114,47 @@ public class CommunicationServicesImp implements CommunicationServices {
         }
         return "Try catch failed.";
     }
+
+//    @Override
+//    public String notifyOldEmailOfUpdate(String newEmail, String userEmail) {
+//
+//        // 1. Fetch the key
+//        String brevoApiKey = Optional.ofNullable(getBrevoKey)
+//                .orElseThrow(() -> new IllegalStateException("BREVO_API_KEY not found in environment variable."));
+//
+//        // 2. Setup Client
+//        ApiClient defaultClient = Configuration.getDefaultApiClient();
+//        ApiKeyAuth apiKeyAuth = (ApiKeyAuth) defaultClient.getAuthentication("api-key");
+//        apiKeyAuth.setApiKey(brevoApiKey);
+//
+//        TransactionalEmailsApi apiInstance = new TransactionalEmailsApi();
+//
+//        // 3. Build Email Components
+//        SendSmtpEmailSender sender = new SendSmtpEmailSender()
+//                .name("O & O Verification App")
+//                .email("oando.applications@gmail.com"); // Must be verified in Brevo
+//
+//        SendSmtpEmailTo to = new SendSmtpEmailTo()
+//                .email(userEmail);
+//
+//        SendSmtpEmail emailContent = new SendSmtpEmail()
+//                .sender(sender)
+//                .to(List.of(to))
+//                .subject("Hello from O & O!")
+//                .htmlContent("<html><body><h1>We have receieved a request to update your email to: " + otp + "</h1></body></html>");
+//
+//        // 4. Send Email
+//        try {
+//            var result = apiInstance.sendTransacEmail(emailContent);
+//            logger.info("Email sent! ID: {}", result.getMessageId());
+//            return "Email sent successfully!";
+//        } catch (ApiException e) {
+//            logger.error("Brevo API error: status={}, body={}", e.getCode(), e.getResponseBody(), e);
+//            return "Error sending email";
+//        }
+//
+//
+//    }
 
 
 }

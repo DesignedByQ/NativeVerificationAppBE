@@ -21,7 +21,6 @@ public class DocumentEntity {
     @Column(name = "national_doc_number")
     private String nationalDocNumber;
 
-    @Lob
     @Column(name = "national_doc_image", columnDefinition = "TEXT")
     private String nationalDocImage;
 
@@ -29,7 +28,6 @@ public class DocumentEntity {
     @Column(name = "voters_doc_number")
     private String votersDocNumber;
 
-    @Lob
     @Column(name = "voters_doc_image", columnDefinition = "TEXT")
     private String votersDocImage;
 
@@ -37,7 +35,6 @@ public class DocumentEntity {
     @Column(name = "drivers_doc_number")
     private String driversDocNumber;
 
-    @Lob
     @Column(name = "drivers_doc_image", columnDefinition = "TEXT")
     private String driversDocImage;
 
@@ -48,7 +45,6 @@ public class DocumentEntity {
     @Column(name = "passport_doc_number")
     private String passportDocNumber;
 
-    @Lob
     @Column(name = "passport_doc_image", columnDefinition = "TEXT")
     private String passportDocImage;
 

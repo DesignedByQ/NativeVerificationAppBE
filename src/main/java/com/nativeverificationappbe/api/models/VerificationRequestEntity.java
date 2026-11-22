@@ -23,6 +23,9 @@ public class VerificationRequestEntity {
     private Boolean phoneVerified = false;
     private Integer emailOTP;
     private Boolean emailVerified = false;
+    private Integer passwordOTP;
+    private Boolean passwordVerified = false;
+    private String requestedCredentialUpdate;
     private LocalDateTime otpCreatedAt = null;
     @Column(unique= true)
     private String expoToken;

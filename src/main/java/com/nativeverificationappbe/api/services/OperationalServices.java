@@ -11,4 +11,5 @@ public interface OperationalServices {
     UserCredentialsEntity getUserCredentials(String user_id);
 
     void updateConfidenceScore(VerificationRequestEntity verifiedUser);
+
 }
