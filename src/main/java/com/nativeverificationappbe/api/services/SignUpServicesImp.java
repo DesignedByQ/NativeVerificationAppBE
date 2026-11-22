@@ -488,6 +488,52 @@ public class SignUpServicesImp implements SignUpServices {
     }
 
     @Override
+    public Boolean checkPasswordOTPmatches(String otp_request, String user_id) {
+
+        Long userId = Long.parseLong(user_id);
+        int otpRequest = Integer.parseInt(otp_request);
+
+        VerificationRequestEntity user = verificationRepo.findUserByAccountId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+
+        var currentOtp = user.getPasswordOTP();
+        var createdAt = user.getOtpCreatedAt();
+
+        // 1. Check if an OTP even exists
+        if (currentOtp == null || createdAt == null) {
+            logger.info("No active OTP found for user.");
+            return false;
+        }
+
+        // 2. Check if the 10 minutes have expired
+        var minutesElapsed = Duration.between(createdAt, LocalDateTime.now()).toMinutes();
+        if (minutesElapsed >= 10) {
+            logger.warn("Clearing OTP because it has expired, minutes elapsed: {}", minutesElapsed);
+
+            // Clear it so they can't try again with an expired code
+            user.setPasswordOTP(null);
+            user.setOtpCreatedAt(null);
+            verificationRepo.save(user);
+            return false;
+        }
+
+        // 3. Match the OTP
+        if (otpRequest == currentOtp) {
+            logger.info("OTP matched successfully.");
+            // Clear the OTP immediately on success
+            user.setPasswordOTP(null);
+            user.setOtpCreatedAt(null);
+            user.setPasswordVerified(true);
+            verificationRepo.save(user);
+
+            return true;
+        } else {
+            logger.info("Incorrect OTP submitted.");
+            return false;
+        }
+    }
+
+    @Override
     public Map<String, Boolean> checkOTPverification(String user_id){
 
         Long userId = Long.parseLong(user_id);
@@ -670,7 +716,7 @@ public class SignUpServicesImp implements SignUpServices {
             getUser.setPasswordVerified(false);
             verificationRepo.save(getUser);
 
-            logger.info("Saved new password OTP to entity: {}", getUser.getEmailOTP());
+            logger.info("Saved new password OTP to entity: {}", user.getEmail());
 
             communicationServicesImp.initiateEmailService(user.getEmail(), newOTP);
 

@@ -31,6 +31,8 @@ public interface SignUpServices {
 
     Boolean checkEmailOTPmatches(String otPrequest, String user_id);
 
+    Boolean checkPasswordOTPmatches(String otp_request, String user_id);
+
     Map<String, Boolean> checkOTPverification(String user_id);
 
     Boolean updateEmailNotification(String newEmail, String user_id);

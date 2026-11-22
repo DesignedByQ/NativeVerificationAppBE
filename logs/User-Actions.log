@@ -1279,3 +1279,236 @@ org.springframework.web.servlet.resource.NoResourceFoundException: No static res
 2026-11-22 18:18:06 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-11-22 18:18:06 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2026-11-22 18:18:06 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-11-22 18:18:30 [restartedMain] INFO  [Req:  | Sess:  | User: ] c.n.api.ApiApplication - Starting ApiApplication using Java 17.0.12 with PID 42304 (C:\Users\henry\NativeVerificationApp\NativeVerificationAppBE\api\target\classes started by henry in C:\Users\henry\NativeVerificationApp\NativeVerificationAppBE\api)
+2026-11-22 18:18:30 [restartedMain] INFO  [Req:  | Sess:  | User: ] c.n.api.ApiApplication - The following 1 profile is active: "local"
+2026-11-22 18:18:30 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-11-22 18:18:30 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-11-22 18:18:31 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-22 18:18:31 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-22 18:18:32 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 145 ms. Found 4 JPA repository interfaces.
+2026-11-22 18:18:32 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-22 18:18:32 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-11-22 18:18:32 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.nativeverificationappbe.api.repos.AddressRepo; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-22 18:18:32 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.nativeverificationappbe.api.repos.DocumentRepo; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-22 18:18:32 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.nativeverificationappbe.api.repos.UserCredRepo; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-22 18:18:32 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.nativeverificationappbe.api.repos.VerificationRepo; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-22 18:18:32 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 32 ms. Found 0 Redis repository interfaces.
+2026-11-22 18:18:33 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-11-22 18:18:33 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-11-22 18:18:33 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.25]
+2026-11-22 18:18:33 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2905 ms
+2026-11-22 18:18:34 [restartedMain] INFO  [Req:  | Sess:  | User: ] org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-22 18:18:34 [restartedMain] INFO  [Req:  | Sess:  | User: ] org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.5.Final
+2026-11-22 18:18:34 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-22 18:18:34 [restartedMain] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-22 18:18:35 [restartedMain] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6dc09c5b
+2026-11-22 18:18:35 [restartedMain] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-22 18:18:35 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/mydatabase]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.15
+	Default catalog/schema: mydatabase/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-22 18:18:37 [restartedMain] INFO  [Req:  | Sess:  | User: ] org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-22 18:18:37 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-22 18:18:37 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-22 18:18:39 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-11-22 18:18:39 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-11-22 18:18:39 [restartedMain] INFO  [Req:  | Sess:  | User: ] c.n.api.ApiApplication - Started ApiApplication in 10.036 seconds (process running for 10.826)
+2026-11-22 18:18:50 [http-nio-8080-exec-1] INFO  [Req:  | Sess:  | User: ] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-22 18:18:50 [http-nio-8080-exec-1] INFO  [Req:  | Sess:  | User: ] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-11-22 18:18:50 [http-nio-8080-exec-1] INFO  [Req:  | Sess:  | User: ] o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-11-22 18:18:50 [http-nio-8080-exec-1] INFO  [Req: d3bfbe3d | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.controllers.Controller - 29FFD3CE3E01F0BCF1F2FFB3A0796629
+2026-11-22 18:18:50 [http-nio-8080-exec-1] INFO  [Req: d3bfbe3d | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.controllers.Controller - 100025
+2026-11-22 18:18:50 [http-nio-8080-exec-1] INFO  [Req: d3bfbe3d | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - 08024554448
+2026-11-22 18:18:50 [http-nio-8080-exec-1] INFO  [Req: d3bfbe3d | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - 08024554448
+2026-11-22 18:18:50 [http-nio-8080-exec-1] INFO  [Req: d3bfbe3d | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - 100025
+2026-11-22 18:18:50 [http-nio-8080-exec-1] INFO  [Req: d3bfbe3d | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - 779036
+2026-11-22 18:18:50 [http-nio-8080-exec-1] INFO  [Req: d3bfbe3d | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - Saved new phone OTP to entity: henry.o@hotmail.co.uk
+2026-11-22 18:18:51 [http-nio-8080-exec-1] ERROR [Req: d3bfbe3d | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.a.s.CommunicationServicesImp - Brevo API Error Code: 402
+2026-11-22 18:18:51 [http-nio-8080-exec-1] ERROR [Req: d3bfbe3d | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.a.s.CommunicationServicesImp - Brevo API Error Response: {"code":"not_enough_credits","message":"You do not have sufficient credits in your account. Please buy the credits from https://app.sendinblue.com/billing/addon/customize/sms ."}
+
+2026-11-22 18:18:51 [http-nio-8080-exec-1] INFO  [Req: d3bfbe3d | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - OTP updated successfully? true
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.controllers.SignUpController - [/updatephoneotp] Confirming OTP matches for: 100025
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - OTP matched successfully.
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - Now persisting Email OTP.
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - henry.o@hotmail.co.uk
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - Saved new email OTP to entity: henry.o@hotmail.co.uk
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.a.s.CommunicationServicesImp - Email sent! ID: <202611221821.76891145811@smtp-relay.mailin.fr>
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.controllers.SignUpController - otpVerified: true
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - 08024554448
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - 08012345678
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.services.SignUpServicesImp - Updated phone for user 100025 to 08024554448
+2026-11-22 18:21:54 [http-nio-8080-exec-3] INFO  [Req: 33c06224 | Sess: 29FFD3CE3E01F0BCF1F2FFB3A0796629 | User: 100025] c.n.api.controllers.SignUpController - phoneUpdated: true
+2026-11-22 19:58:59 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-11-22 19:58:59 [tomcat-shutdown] INFO  [Req:  | Sess:  | User: ] o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-11-22 19:58:59 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-11-22 19:58:59 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-11-22 19:58:59 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-11-22 19:59:36 [restartedMain] INFO  [Req:  | Sess:  | User: ] c.n.api.ApiApplication - Starting ApiApplication using Java 17.0.12 with PID 39408 (C:\Users\henry\NativeVerificationApp\NativeVerificationAppBE\api\target\classes started by henry in C:\Users\henry\NativeVerificationApp\NativeVerificationAppBE\api)
+2026-11-22 19:59:36 [restartedMain] INFO  [Req:  | Sess:  | User: ] c.n.api.ApiApplication - The following 1 profile is active: "local"
+2026-11-22 19:59:36 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-11-22 19:59:36 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-11-22 19:59:38 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-22 19:59:38 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-22 19:59:38 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 212 ms. Found 4 JPA repository interfaces.
+2026-11-22 19:59:38 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-11-22 19:59:38 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-11-22 19:59:38 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.nativeverificationappbe.api.repos.AddressRepo; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-22 19:59:38 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.nativeverificationappbe.api.repos.DocumentRepo; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-22 19:59:38 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.nativeverificationappbe.api.repos.UserCredRepo; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-22 19:59:38 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.nativeverificationappbe.api.repos.VerificationRepo; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-11-22 19:59:38 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 22 ms. Found 0 Redis repository interfaces.
+2026-11-22 19:59:39 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-11-22 19:59:39 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-11-22 19:59:39 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.25]
+2026-11-22 19:59:40 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 3295 ms
+2026-11-22 19:59:40 [restartedMain] INFO  [Req:  | Sess:  | User: ] org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-22 19:59:40 [restartedMain] INFO  [Req:  | Sess:  | User: ] org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.5.Final
+2026-11-22 19:59:41 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-22 19:59:41 [restartedMain] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-22 19:59:41 [restartedMain] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@60347c71
+2026-11-22 19:59:41 [restartedMain] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-22 19:59:41 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/mydatabase]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.15
+	Default catalog/schema: mydatabase/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-22 19:59:43 [restartedMain] INFO  [Req:  | Sess:  | User: ] org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-22 19:59:43 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-22 19:59:43 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-22 19:59:46 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-11-22 19:59:46 [restartedMain] INFO  [Req:  | Sess:  | User: ] o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-11-22 19:59:46 [restartedMain] INFO  [Req:  | Sess:  | User: ] c.n.api.ApiApplication - Started ApiApplication in 10.712 seconds (process running for 11.405)
+2026-11-22 20:09:20 [http-nio-8080-exec-2] INFO  [Req:  | Sess:  | User: ] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-22 20:09:20 [http-nio-8080-exec-2] INFO  [Req:  | Sess:  | User: ] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-11-22 20:09:20 [http-nio-8080-exec-2] INFO  [Req:  | Sess:  | User: ] o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-11-22 20:09:20 [http-nio-8080-exec-2] ERROR [Req: bc356318 | Sess: NONE | User: ANONYMOUS] c.n.a.e.GlobalExceptionHandler - Unhandled exception caught in GlobalExceptionHandler
+java.lang.NullPointerException: Cannot invoke "jakarta.servlet.http.HttpSession.getAttribute(String)" because "session" is null
+	at com.nativeverificationappbe.api.controllers.Controller.updatePassword(Controller.java:160)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:252)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:184)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:649)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:132)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:59)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at com.nativeverificationappbe.api.config.MdcLoggingFilter.doFilterInternal(MdcLoggingFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:535)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:86)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:71)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:347)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:71)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1307)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:2201)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:74)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:949)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:483)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:74)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+2026-11-22 20:09:20 [http-nio-8080-exec-2] WARN  [Req: bc356318 | Sess: NONE | User: ANONYMOUS] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.NullPointerException: Cannot invoke "jakarta.servlet.http.HttpSession.getAttribute(String)" because "session" is null]
+2026-11-22 20:13:03 [http-nio-8080-exec-3] INFO  [Req: b6df34b8 | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.api.controllers.Controller - 935380E0BA883063AFFD2594ABD6671C
+2026-11-22 20:13:03 [http-nio-8080-exec-3] INFO  [Req: b6df34b8 | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.api.controllers.Controller - 100025
+2026-11-22 20:13:20 [http-nio-8080-exec-6] INFO  [Req: 51e55baf | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.api.controllers.Controller - 935380E0BA883063AFFD2594ABD6671C
+2026-11-22 20:13:20 [http-nio-8080-exec-6] INFO  [Req: 51e55baf | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.api.controllers.Controller - 100025
+2026-11-22 20:13:20 [http-nio-8080-exec-6] INFO  [Req: 51e55baf | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.api.services.SignUpServicesImp - password123
+2026-11-22 20:13:20 [http-nio-8080-exec-6] INFO  [Req: 51e55baf | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.api.services.SignUpServicesImp - 100025
+2026-11-22 20:13:20 [http-nio-8080-exec-6] INFO  [Req: 51e55baf | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.api.services.SignUpServicesImp - 295048
+2026-11-22 20:13:20 [http-nio-8080-exec-6] INFO  [Req: 51e55baf | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.api.services.SignUpServicesImp - Saved new password OTP to entity: 357914
+2026-11-22 20:13:21 [http-nio-8080-exec-6] INFO  [Req: 51e55baf | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.a.s.CommunicationServicesImp - Email sent! ID: <202611222013.20987588832@smtp-relay.mailin.fr>
+2026-11-22 20:13:21 [http-nio-8080-exec-6] INFO  [Req: 51e55baf | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.api.services.SignUpServicesImp - OTP persisted and sent successfully? true
+2026-11-22 20:13:44 [http-nio-8080-exec-7] ERROR [Req: 1fd43ee7 | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] c.n.a.e.GlobalExceptionHandler - Unhandled exception caught in GlobalExceptionHandler
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource nativeverificationappbe/api/controller/updatepasswordotp for request '/nativeverificationappbe/api/controller/updatepasswordotp'.
+	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:527)
+	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:50)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:649)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:132)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:59)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at com.nativeverificationappbe.api.config.MdcLoggingFilter.doFilterInternal(MdcLoggingFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:535)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:86)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:71)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:347)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:71)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1307)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:2201)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:74)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:949)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:483)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:74)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+2026-11-22 20:13:44 [http-nio-8080-exec-7] WARN  [Req: 1fd43ee7 | Sess: 935380E0BA883063AFFD2594ABD6671C | User: 100025] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource nativeverificationappbe/api/controller/updatepasswordotp for request '/nativeverificationappbe/api/controller/updatepasswordotp'.]
+2026-11-22 20:36:27 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-11-22 20:36:27 [tomcat-shutdown] INFO  [Req:  | Sess:  | User: ] o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-11-22 20:36:27 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-11-22 20:36:27 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-11-22 20:36:27 [SpringApplicationShutdownHook] INFO  [Req:  | Sess:  | User: ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

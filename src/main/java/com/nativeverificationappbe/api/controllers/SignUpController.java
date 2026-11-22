@@ -278,12 +278,12 @@ public class SignUpController {
             //get user and update email and nullify other
             passwordUpdated = signUpServices.updatePassword(userId);
         }
-        logger.info("emailUpdated: {}", passwordUpdated);
+        logger.info("passwordUpdated: {}", passwordUpdated);
         return ResponseEntity.ok(Map.of(
                 "sessionId", session.getId(),
                 "sessionUser", userId,
                 "otpVerified", otpVerified.toString(),
-                "emailUpdated", String.valueOf(passwordUpdated)));
+                "passwordUpdated", String.valueOf(passwordUpdated)));
     }
 
 }
